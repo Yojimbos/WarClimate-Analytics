@@ -1,4 +1,4 @@
-resource_group_name  = "enemy-losses-weather-demo-tfstate-rg"
+resource_group_name  = "war-climate-analytics-tfstate-rg"
 storage_account_name = "elwdemotfstate001"
 container_name       = "tfstate"
 key                  = "dev/terraform.tfstate"

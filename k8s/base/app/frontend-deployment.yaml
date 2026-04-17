@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: enemy-losses-frontend
+  name: war-climate-analytics-frontend
   namespace: app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: enemy-losses-frontend
+      app: war-climate-analytics-frontend
   template:
     metadata:
       labels:
-        app: enemy-losses-frontend
+        app: war-climate-analytics-frontend
     spec:
       containers:
         - name: frontend
-          image: acrplaceholder.azurecr.io/enemy-losses-frontend:latest
+          image: acrplaceholder.azurecr.io/war-climate-analytics-frontend:latest
           ports:
             - containerPort: 8080
           resources:

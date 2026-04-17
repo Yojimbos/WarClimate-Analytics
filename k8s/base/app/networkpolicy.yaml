@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: enemy-losses-api
+  name: war-climate-analytics-api
   namespace: app
 spec:
   podSelector:
     matchLabels:
-      app: enemy-losses-api
+      app: war-climate-analytics-api
   policyTypes:
     - Ingress
     - Egress

@@ -5,25 +5,25 @@ resources:
 patches:
   - target:
       kind: Ingress
-      name: enemy-losses
+      name: war-climate-analytics
     patch: |-
       - op: replace
         path: /spec/rules/0/host
-        value: enemy-losses.40.127.195.251.sslip.io
+        value: war-climate-analytics.40.127.195.251.sslip.io
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: enemy-losses.40.127.195.251.sslip.io
+        value: war-climate-analytics.40.127.195.251.sslip.io
   - target:
       kind: ConfigMap
-      name: enemy-losses-config
+      name: war-climate-analytics-config
     patch: |-
       - op: replace
         path: /data/CORS_ORIGINS
-        value: https://enemy-losses.40.127.195.251.sslip.io
+        value: https://war-climate-analytics.40.127.195.251.sslip.io
 images:
-  - name: acrplaceholder.azurecr.io/enemy-losses-api
-    newName: acrenemylossesweatherdemodevseumu.azurecr.io/enemy-losses-api
+  - name: acrplaceholder.azurecr.io/war-climate-analytics-api
+    newName: acrwarclimateanalyticsdevseumu.azurecr.io/war-climate-analytics-api
     newTag: 8c1dbf66d61fdcc00ebd3bbd7c45d251b9f2cc11
-  - name: acrplaceholder.azurecr.io/enemy-losses-frontend
-    newName: acrenemylossesweatherdemodevseumu.azurecr.io/enemy-losses-frontend
+  - name: acrplaceholder.azurecr.io/war-climate-analytics-frontend
+    newName: acrwarclimateanalyticsdevseumu.azurecr.io/war-climate-analytics-frontend
     newTag: 8c1dbf66d61fdcc00ebd3bbd7c45d251b9f2cc11

@@ -1,4 +1,4 @@
-# Enemy Losses vs Weather Demo
+# WarClimate_Analytics
 
 Portfolio-grade demo that visualizes official daily enemy personnel loss data against historical weather baselines for Ukraine. The solution focuses on historical ingestion, transparent data provenance, and a cost-aware cloud-native deployment path on Azure.
 

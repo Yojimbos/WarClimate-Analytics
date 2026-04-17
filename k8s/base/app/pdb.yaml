@@ -1,11 +1,11 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: enemy-losses-api
+  name: war-climate-analytics-api
   namespace: app
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      app: enemy-losses-api
+      app: war-climate-analytics-api
 

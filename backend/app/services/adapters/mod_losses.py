@@ -41,7 +41,7 @@ class ModOfficialLossesAdapter(LossesAdapter):
     async def fetch_range(self, from_date: date, to_date: date) -> list[LossesRecordPayload]:
         cumulative_by_date: dict[date, tuple[int, str, str]] = {}
         async with httpx.AsyncClient(
-            timeout=15.0, headers={"User-Agent": "enemy-losses-weather-demo/0.1"}
+            timeout=15.0, headers={"User-Agent": "war-climate-analytics/0.1"}
         ) as client:
             current = from_date - timedelta(days=1)
             while current <= to_date:

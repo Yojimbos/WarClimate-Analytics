@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: enemy-losses-ingestion
+  name: war-climate-analytics-ingestion
   namespace: app
 spec:
   schedule: "15 6 * * *"
@@ -13,16 +13,16 @@ spec:
       template:
         spec:
           restartPolicy: Never
-          serviceAccountName: enemy-losses-api
+          serviceAccountName: war-climate-analytics-api
           containers:
             - name: ingest
-              image: acrplaceholder.azurecr.io/enemy-losses-api:latest
+              image: acrplaceholder.azurecr.io/war-climate-analytics-api:latest
               command: ["python", "-m", "app.cli", "ingest", "--days", "30", "--location", "kyiv"]
               envFrom:
                 - configMapRef:
-                    name: enemy-losses-config
+                    name: war-climate-analytics-config
                 - secretRef:
-                    name: enemy-losses-secrets
+                    name: war-climate-analytics-secrets
               resources:
                 requests:
                   cpu: 100m

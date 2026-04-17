@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: enemy-losses
+  name: war-climate-analytics
   namespace: app
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -11,7 +11,7 @@ spec:
   tls:
     - hosts:
         - demo.example.com
-      secretName: enemy-losses-tls
+      secretName: war-climate-analytics-tls
   rules:
     - host: demo.example.com
       http:
@@ -20,13 +20,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: enemy-losses-api
+                name: war-climate-analytics-api
                 port:
                   number: 80
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: enemy-losses-frontend
+                name: war-climate-analytics-frontend
                 port:
                   number: 80

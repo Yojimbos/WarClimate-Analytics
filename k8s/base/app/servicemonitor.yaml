@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: enemy-losses-api
+  name: war-climate-analytics-api
   namespace: monitoring
 spec:
   namespaceSelector:
@@ -9,7 +9,7 @@ spec:
       - app
   selector:
     matchLabels:
-      app: enemy-losses-api
+      app: war-climate-analytics-api
   endpoints:
     - port: http
       path: /metrics

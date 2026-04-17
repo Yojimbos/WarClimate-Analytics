@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: enemy-losses-frontend
+  name: war-climate-analytics-frontend
   namespace: app
 spec:
   selector:
-    app: enemy-losses-frontend
+    app: war-climate-analytics-frontend
   ports:
     - name: http
       port: 80

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: enemy-losses-grafana-datasources
+  name: war-climate-analytics-grafana-datasources
   namespace: monitoring
   labels:
     grafana_datasource: "1"
