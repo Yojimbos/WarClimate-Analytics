@@ -1,11 +1,15 @@
 locals {
-  prefix = "${var.project_name}-${var.environment}"
+  prefix            = "${var.project_name}-${var.environment}"
+  normalized_prefix = replace(local.prefix, "-", "")
+  key_vault_name    = "${substr(local.normalized_prefix, 0, 16)}kv${random_string.suffix.result}"
   tags = {
     project     = var.project_name
     environment = var.environment
     managed_by  = "terraform"
   }
 }
+
+data "azurerm_client_config" "current" {}
 
 resource "random_string" "suffix" {
   length  = 5
@@ -67,6 +71,37 @@ resource "azurerm_container_registry" "this" {
   sku                 = "Basic"
   admin_enabled       = false
   tags                = local.tags
+}
+
+resource "azurerm_key_vault" "this" {
+  name                        = local.key_vault_name
+  location                    = azurerm_resource_group.this.location
+  resource_group_name         = azurerm_resource_group.this.name
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  sku_name                    = "standard"
+  soft_delete_retention_days  = 7
+  purge_protection_enabled    = true
+  enabled_for_disk_encryption = true
+  tags                        = local.tags
+}
+
+resource "azurerm_key_vault_access_policy" "current" {
+  key_vault_id = azurerm_key_vault.this.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  secret_permissions = [
+    "Get",
+    "List",
+    "Set",
+    "Delete",
+    "Recover",
+    "Purge",
+  ]
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "azurerm_user_assigned_identity" "aks" {
@@ -158,3 +193,32 @@ resource "azurerm_postgresql_flexible_server_database" "app" {
   collation = "en_US.utf8"
 }
 
+resource "azurerm_key_vault_secret" "acr_login_server" {
+  name         = "acr-login-server"
+  value        = azurerm_container_registry.this.login_server
+  key_vault_id = azurerm_key_vault.this.id
+
+  lifecycle {
+    ignore_changes = all
+  }
+}
+
+resource "azurerm_key_vault_secret" "postgres_fqdn" {
+  name         = "postgres-fqdn"
+  value        = azurerm_postgresql_flexible_server.this.fqdn
+  key_vault_id = azurerm_key_vault.this.id
+
+  lifecycle {
+    ignore_changes = all
+  }
+}
+
+resource "azurerm_key_vault_secret" "postgres_database_name" {
+  name         = "postgres-database-name"
+  value        = azurerm_postgresql_flexible_server_database.app.name
+  key_vault_id = azurerm_key_vault.this.id
+
+  lifecycle {
+    ignore_changes = all
+  }
+}

@@ -13,6 +13,10 @@ permissions:
   packages: write
   id-token: write
 
+env:
+  PROJECT_NAME: enemy-losses-weather-demo
+  ENVIRONMENT: dev
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,13 +39,24 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - uses: azure/docker-login@v2
-        with:
-          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+      - name: Discover ACR from Azure
+        id: acr
+        shell: bash
+        run: |
+          RG_NAME="${PROJECT_NAME}-${ENVIRONMENT}-rg"
+          ACR_NAME=$(az acr list --resource-group "$RG_NAME" --query "[0].name" -o tsv)
+          ACR_LOGIN_SERVER=$(az acr list --resource-group "$RG_NAME" --query "[0].loginServer" -o tsv)
+          if [ -z "$ACR_NAME" ] || [ -z "$ACR_LOGIN_SERVER" ]; then
+            echo "ACR not found in resource group $RG_NAME"
+            exit 1
+          fi
+          echo "name=$ACR_NAME" >> "$GITHUB_OUTPUT"
+          echo "login_server=$ACR_LOGIN_SERVER" >> "$GITHUB_OUTPUT"
+      - name: Login to ACR
+        run: az acr login --name "${{ steps.acr.outputs.name }}"
       - uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: true
-          tags: ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ github.sha }}
-
+          tags: ${{ steps.acr.outputs.login_server }}/${{ matrix.image }}:${{ github.sha }}

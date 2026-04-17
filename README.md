@@ -22,7 +22,7 @@ Portfolio-grade demo that visualizes official daily enemy personnel loss data ag
 - Weather source: Open-Meteo archive API for historical daily reference weather.
 - Backend computes rolling averages, Pearson and Spearman correlations, summary cards, and chart-ready series.
 - Frontend queries the REST API and renders charts, tables, source cards, and limitations.
-- Azure target footprint: AKS, ACR, Azure Database for PostgreSQL Flexible Server, optional Key Vault, public ingress only.
+- Azure target footprint: AKS, ACR, Azure Database for PostgreSQL Flexible Server, Azure Key Vault, public ingress only.
 
 More detail is available in [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -89,6 +89,7 @@ This demo uses a documented weather proxy strategy instead of claiming battlefie
 ## Security Notes
 
 - No secrets are stored in the repository.
+- Azure Key Vault stores platform-side secret and metadata values, including the ACR login server.
 - Admin reimport endpoint requires a dedicated API key and is intended for internal use only.
 - Containers run as non-root with read-only filesystems in Kubernetes where possible.
 - NetworkPolicy, security headers, RBAC, and GitHub Actions least-privilege defaults are included.

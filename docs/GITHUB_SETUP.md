@@ -7,7 +7,6 @@ Configure the following repository secrets before enabling container publishing 
 - `AZURE_CLIENT_ID`
 - `AZURE_TENANT_ID`
 - `AZURE_SUBSCRIPTION_ID`
-- `ACR_LOGIN_SERVER`
 
 ## Optional Runtime Secrets
 
@@ -32,6 +31,18 @@ Use GitHub OpenID Connect with a federated credential on an Azure Entra applicat
 2. Add a federated credential scoped to the repository and `main` branch.
 3. Grant the principal access to push images to ACR and, if needed, read deployment metadata.
 4. Store the resulting application identifiers as repository secrets.
+
+Recommended Azure roles for the GitHub OIDC principal:
+
+- `Reader` on the resource group that contains the ACR and AKS resources.
+- `AcrPush` on the Azure Container Registry.
+
+## ACR And Key Vault
+
+- `ACR_LOGIN_SERVER` is not required as a GitHub secret.
+- Terraform creates Azure Container Registry and Azure Key Vault.
+- Terraform stores the ACR login server in Key Vault as `acr-login-server`.
+- The `container-build` workflow discovers the ACR directly from Azure after OIDC login, which avoids duplicating that value in GitHub.
 
 ## Flux Image Update Flow
 

@@ -10,6 +10,10 @@ output "acr_login_server" {
   value = azurerm_container_registry.this.login_server
 }
 
+output "key_vault_name" {
+  value = azurerm_key_vault.this.name
+}
+
 output "ingress_public_ip" {
   value = azurerm_public_ip.ingress.ip_address
 }
@@ -17,4 +21,3 @@ output "ingress_public_ip" {
 output "postgres_fqdn" {
   value = azurerm_postgresql_flexible_server.this.fqdn
 }
-
