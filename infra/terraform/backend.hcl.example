@@ -1,0 +1,6 @@
+resource_group_name  = "enemy-losses-weather-demo-tfstate-rg"
+storage_account_name = "elwdemotfstate001"
+container_name       = "tfstate"
+key                  = "dev/terraform.tfstate"
+use_azuread_auth     = true
+

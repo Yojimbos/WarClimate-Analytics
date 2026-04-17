@@ -85,6 +85,13 @@ resource "azurerm_key_vault" "this" {
   tags                        = local.tags
 }
 
+resource "azurerm_management_lock" "key_vault" {
+  name       = "${local.prefix}-kv-cannot-delete"
+  scope      = azurerm_key_vault.this.id
+  lock_level = "CanNotDelete"
+  notes      = "Protect Key Vault from accidental deletion."
+}
+
 resource "azurerm_key_vault_access_policy" "current" {
   key_vault_id = azurerm_key_vault.this.id
   tenant_id    = data.azurerm_client_config.current.tenant_id

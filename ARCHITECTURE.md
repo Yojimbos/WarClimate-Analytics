@@ -19,10 +19,11 @@ The system is composed of four primary layers:
 
 ## Deployment Flow
 
-1. Terraform provisions Azure primitives.
-2. GitHub Actions builds and pushes application images to ACR.
-3. Flux watches the repository and reconciles Kubernetes manifests in the dev overlay.
-4. Ingress exposes the UI and API through TLS.
+1. Terraform bootstrap provisions remote state storage in Azure Blob Storage.
+2. The main Terraform stack provisions Azure primitives and stores platform secrets or metadata in Key Vault.
+3. GitHub Actions builds and pushes application images to ACR.
+4. Flux watches the repository and reconciles Kubernetes manifests in the dev overlay.
+5. Ingress exposes the UI and API through TLS.
 
 ## Observability Flow
 

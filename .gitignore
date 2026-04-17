@@ -11,6 +11,7 @@ build/
 .env
 .env.*
 .tmp/
+.azure/
 node_modules/
 frontend/dist/
 .DS_Store
@@ -23,3 +24,5 @@ terraform.tfstate.*
 .terraform/
 .terraform.lock.hcl
 *.tfplan
+backend.hcl
+terraform.tfvars

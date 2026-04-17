@@ -56,6 +56,7 @@ make test
 ## Quick Start: Cloud
 
 1. Provision Azure baseline with Terraform under `infra/terraform`.
+2. Bootstrap Terraform remote state in Azure Storage before switching the main stack to remote backend.
 2. Bootstrap Flux against the AKS cluster.
 3. Push backend and frontend images to ACR through GitHub Actions.
 4. Update image tags through Flux-managed manifests.
@@ -90,6 +91,7 @@ This demo uses a documented weather proxy strategy instead of claiming battlefie
 
 - No secrets are stored in the repository.
 - Azure Key Vault stores platform-side secret and metadata values, including the ACR login server.
+- Terraform state should be stored in Azure Blob Storage, not in Key Vault.
 - Admin reimport endpoint requires a dedicated API key and is intended for internal use only.
 - Containers run as non-root with read-only filesystems in Kubernetes where possible.
 - NetworkPolicy, security headers, RBAC, and GitHub Actions least-privilege defaults are included.
