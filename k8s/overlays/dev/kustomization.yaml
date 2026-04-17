@@ -23,7 +23,7 @@ patches:
 images:
   - name: acrplaceholder.azurecr.io/war-climate-analytics-api
     newName: acrwarclimateanalyticsdevseumu.azurecr.io/war-climate-analytics-api
-    newTag: 7e687b8e9dcca88e27f5c3f7543d179fbadaf3e1
+    newTag: 8badcb8c21a67911c959c11f80ed735da1524f8d
   - name: acrplaceholder.azurecr.io/war-climate-analytics-frontend
     newName: acrwarclimateanalyticsdevseumu.azurecr.io/war-climate-analytics-frontend
-    newTag: 7e687b8e9dcca88e27f5c3f7543d179fbadaf3e1
+    newTag: 8badcb8c21a67911c959c11f80ed735da1524f8d
