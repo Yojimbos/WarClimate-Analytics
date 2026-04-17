@@ -39,3 +39,19 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: monitoring-crs
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./k8s/monitoring-crs/dev
+  prune: true
+  wait: true
+  dependsOn:
+    - name: apps
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
