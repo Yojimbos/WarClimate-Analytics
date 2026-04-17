@@ -22,6 +22,7 @@ These should not be stored in GitHub unless your deployment process requires the
 - Require pull request review before merge.
 - Require `backend-ci`, `frontend-ci`, `infra-validate`, and `security` checks.
 - Restrict GitHub Actions to approved actions if your org policy allows it.
+- Add repository variable `ENABLE_CODE_SCANNING=true` only after GitHub Code Scanning is enabled for the repository.
 
 ## Azure Identity Pattern
 
@@ -48,3 +49,10 @@ Recommended Azure roles for the GitHub OIDC principal:
 
 The current workflow updates `k8s/overlays/dev/kustomization.yaml` with the current `GITHUB_SHA`.
 For a more scalable setup, replace this with Flux image automation controllers in a future iteration.
+
+## Code Scanning
+
+- The `security` workflow runs CodeQL only when the repository variable `ENABLE_CODE_SCANNING` is set to `true`.
+- This avoids failing the workflow in repositories where GitHub Code Scanning has not been enabled yet.
+- For public repositories, enable Code Scanning in GitHub repository settings first.
+- For private repositories, Code Scanning may require GitHub Advanced Security depending on your plan.
