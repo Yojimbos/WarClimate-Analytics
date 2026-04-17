@@ -23,8 +23,8 @@ patches:
 images:
   - name: acrplaceholder.azurecr.io/enemy-losses-api
     newName: acrplaceholder.azurecr.io/enemy-losses-api
-    newTag: a05561d8cebaddfb31a0d48154a65d9babf58c6e
+    newTag: b63f33af0a21c907cc48ecac2789bf08dfee4342
   - name: acrplaceholder.azurecr.io/enemy-losses-frontend
     newName: acrplaceholder.azurecr.io/enemy-losses-frontend
-    newTag: a05561d8cebaddfb31a0d48154a65d9babf58c6e
+    newTag: b63f33af0a21c907cc48ecac2789bf08dfee4342
 
