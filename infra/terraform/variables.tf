@@ -10,28 +10,28 @@ variable "location" {
 }
 
 variable "project_name" {
-  type        = string
-  default     = "enemy-losses-weather-demo"
+  type    = string
+  default = "enemy-losses-weather-demo"
 }
 
 variable "environment" {
-  type        = string
-  default     = "dev"
+  type    = string
+  default = "dev"
 }
 
 variable "aks_node_count" {
-  type        = number
-  default     = 2
+  type    = number
+  default = 2
 }
 
 variable "aks_vm_size" {
-  type        = string
-  default     = "Standard_B4ms"
+  type    = string
+  default = "Standard_B4ms"
 }
 
 variable "postgres_admin_username" {
-  type        = string
-  default     = "pgadmin"
+  type    = string
+  default = "pgadmin"
 }
 
 variable "postgres_admin_password" {
