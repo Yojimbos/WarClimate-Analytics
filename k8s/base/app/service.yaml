@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: enemy-losses-api
+  namespace: app
+  labels:
+    app: enemy-losses-api
+spec:
+  selector:
+    app: enemy-losses-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+

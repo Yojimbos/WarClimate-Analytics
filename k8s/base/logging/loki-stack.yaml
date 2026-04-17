@@ -1,0 +1,26 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: loki-stack
+  namespace: logging
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: loki-stack
+      version: "2.10.2"
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+  values:
+    loki:
+      enabled: true
+      persistence:
+        enabled: false
+    promtail:
+      enabled: true
+    fluent-bit:
+      enabled: false
+    grafana:
+      enabled: false
+

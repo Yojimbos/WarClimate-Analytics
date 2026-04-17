@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: enemy-losses-config
+  namespace: app
+data:
+  APP_ENV: dev
+  LOSSES_PROVIDER: official
+  WEATHER_PROVIDER: open-meteo
+  CORS_ORIGINS: https://demo.example.com
+

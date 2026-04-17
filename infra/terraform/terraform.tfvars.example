@@ -1,0 +1,9 @@
+subscription_id          = "00000000-0000-0000-0000-000000000000"
+location                 = "westeurope"
+project_name             = "enemy-losses-weather-demo"
+environment              = "dev"
+aks_node_count           = 2
+aks_vm_size              = "Standard_B4ms"
+postgres_admin_username  = "pgadmin"
+postgres_admin_password  = "replace-me"
+

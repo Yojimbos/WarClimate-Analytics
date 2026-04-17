@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+patches:
+  - target:
+      kind: Ingress
+      name: enemy-losses
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: demo.dev.example.com
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: demo.dev.example.com
+  - target:
+      kind: ConfigMap
+      name: enemy-losses-config
+    patch: |-
+      - op: replace
+        path: /data/CORS_ORIGINS
+        value: https://demo.dev.example.com
+images:
+  - name: acrplaceholder.azurecr.io/enemy-losses-api
+    newName: acrplaceholder.azurecr.io/enemy-losses-api
+    newTag: latest
+  - name: acrplaceholder.azurecr.io/enemy-losses-frontend
+    newName: acrplaceholder.azurecr.io/enemy-losses-frontend
+    newTag: latest
+

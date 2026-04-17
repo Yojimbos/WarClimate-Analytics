@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enemy Losses vs Weather Demo</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js" defer></script>
+    <script src="./js/app.js" type="module" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Historical analytics demo</p>
+          <h1>Enemy Losses vs Weather Demo</h1>
+          <p class="hero-copy">
+            A portfolio-grade dashboard comparing official daily personnel loss publications
+            with historical weather reference baselines across selected Ukrainian cities.
+          </p>
+        </div>
+        <div class="hero-panel">
+          <p class="hero-panel-title">Scope</p>
+          <ul>
+            <li>Official Ukrainian state source for losses</li>
+            <li>Historical weather baseline only</li>
+            <li>No forecasting or operational inference</li>
+          </ul>
+        </div>
+      </header>
+
+      <main class="content-grid">
+        <section class="controls card">
+          <div class="field">
+            <label for="fromDate">From</label>
+            <input id="fromDate" type="date" />
+          </div>
+          <div class="field">
+            <label for="toDate">To</label>
+            <input id="toDate" type="date" />
+          </div>
+          <div class="field">
+            <label for="location">Reference location</label>
+            <select id="location">
+              <option value="kyiv">Kyiv</option>
+              <option value="lviv">Lviv</option>
+              <option value="odesa">Odesa</option>
+              <option value="kharkiv">Kharkiv</option>
+            </select>
+          </div>
+          <button id="applyFilters" class="primary-button" type="button">Apply filters</button>
+        </section>
+
+        <section class="summary-grid" id="summaryCards"></section>
+
+        <section class="chart-panel card">
+          <div class="panel-header">
+            <h2>Daily losses and weather trend</h2>
+            <p>Daily personnel losses with weather reference overlays and rolling averages.</p>
+          </div>
+          <canvas id="timeseriesChart"></canvas>
+        </section>
+
+        <section class="chart-panel card">
+          <div class="panel-header">
+            <h2>Temperature vs losses</h2>
+            <p>Scatter view for descriptive comparison only.</p>
+          </div>
+          <canvas id="temperatureScatter"></canvas>
+        </section>
+
+        <section class="chart-panel card">
+          <div class="panel-header">
+            <h2>Precipitation vs losses</h2>
+            <p>Scatter view for descriptive comparison only.</p>
+          </div>
+          <canvas id="precipitationScatter"></canvas>
+        </section>
+
+        <section class="card table-panel">
+          <div class="panel-header">
+            <h2>Daily records</h2>
+            <p>Losses, selected weather baseline, and 7-day rolling averages.</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Losses</th>
+                  <th>Avg temp</th>
+                  <th>Precipitation</th>
+                  <th>Weather</th>
+                  <th>Rolling losses</th>
+                </tr>
+              </thead>
+              <tbody id="recordsTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card side-panel">
+          <div class="panel-header">
+            <h2>Correlation notes</h2>
+          </div>
+          <ul id="insightsList" class="notes-list"></ul>
+        </section>
+
+        <section class="card side-panel">
+          <div class="panel-header">
+            <h2>Data sources</h2>
+          </div>
+          <ul id="sourcesList" class="notes-list"></ul>
+        </section>
+
+        <section class="card side-panel">
+          <div class="panel-header">
+            <h2>Limitations and disclaimer</h2>
+          </div>
+          <ul id="limitationsList" class="notes-list"></ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
+

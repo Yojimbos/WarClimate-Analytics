@@ -1,0 +1,31 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-flux-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update image tags
+        run: |
+          python - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+          path = Path("k8s/overlays/dev/kustomization.yaml")
+          text = path.read_text(encoding="utf-8")
+          text = re.sub(r"newTag:\s+\S+", f"newTag: {os.environ['GITHUB_SHA']}", text)
+          path.write_text(text, encoding="utf-8")
+          PY
+      - name: Commit image tag update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: update flux image tag ${GITHUB_SHA}" || exit 0
+          git push

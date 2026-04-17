@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enemy-losses-api
+  namespace: app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: enemy-losses-api
+  template:
+    metadata:
+      labels:
+        app: enemy-losses-api
+    spec:
+      serviceAccountName: enemy-losses-api
+      securityContext:
+        fsGroup: 10001
+      containers:
+        - name: api
+          image: acrplaceholder.azurecr.io/enemy-losses-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: enemy-losses-config
+            - secretRef:
+                name: enemy-losses-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+

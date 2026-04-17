@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enemy-losses-frontend
+  namespace: app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: enemy-losses-frontend
+  template:
+    metadata:
+      labels:
+        app: enemy-losses-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: acrplaceholder.azurecr.io/enemy-losses-frontend:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]

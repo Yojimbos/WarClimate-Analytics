@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespaces.yaml
+  - app/configmap.yaml
+  - app/serviceaccount.yaml
+  - app/deployment.yaml
+  - app/service.yaml
+  - app/frontend-deployment.yaml
+  - app/frontend-service.yaml
+  - app/pdb.yaml
+  - app/networkpolicy.yaml
+  - app/cronjob.yaml
+  - app/servicemonitor.yaml
+  - app/ingress.yaml
+  - ingress/helmrepository.yaml
+  - ingress/ingress-nginx.yaml
+  - ingress/cert-manager.yaml
+  - ingress/clusterissuer.yaml
+  - monitoring/helmrepository.yaml
+  - monitoring/kube-prometheus-stack.yaml
+  - monitoring/grafana-dashboards-configmap.yaml
+  - monitoring/grafana-datasources-configmap.yaml
+  - logging/helmrepository.yaml
+  - logging/loki-stack.yaml

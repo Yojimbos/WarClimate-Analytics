@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: enemy-losses-grafana-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  api-overview.json: |
+    {
+      "title": "Enemy Losses API Overview",
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "version": 1,
+      "panels": [
+        {
+          "type": "timeseries",
+          "title": "Request Rate",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+          "targets": [{ "expr": "sum(rate(http_requests_total[5m]))", "legendFormat": "requests/s" }]
+        },
+        {
+          "type": "timeseries",
+          "title": "Error Rate",
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+          "targets": [{ "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m]))", "legendFormat": "5xx/s" }]
+        }
+      ]
+    }
