@@ -29,6 +29,12 @@ variable "aks_vm_size" {
   default = "Standard_B4ms"
 }
 
+variable "aks_kubernetes_version" {
+  type        = string
+  default     = "1.34.4"
+  description = "AKS version supported in the selected Azure region without LTS-only constraints."
+}
+
 variable "postgres_admin_username" {
   type    = string
   default = "pgadmin"
@@ -40,3 +46,8 @@ variable "postgres_admin_password" {
   description = "PostgreSQL admin password."
 }
 
+variable "postgres_zone" {
+  type        = string
+  default     = null
+  description = "Optional availability zone for PostgreSQL Flexible Server. Leave null to let Azure place it."
+}

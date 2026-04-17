@@ -9,22 +9,21 @@ patches:
     patch: |-
       - op: replace
         path: /spec/rules/0/host
-        value: demo.dev.example.com
+        value: enemy-losses.40.127.195.251.sslip.io
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: demo.dev.example.com
+        value: enemy-losses.40.127.195.251.sslip.io
   - target:
       kind: ConfigMap
       name: enemy-losses-config
     patch: |-
       - op: replace
         path: /data/CORS_ORIGINS
-        value: https://demo.dev.example.com
+        value: https://enemy-losses.40.127.195.251.sslip.io
 images:
   - name: acrplaceholder.azurecr.io/enemy-losses-api
-    newName: acrplaceholder.azurecr.io/enemy-losses-api
+    newName: acrenemylossesweatherdemodevseumu.azurecr.io/enemy-losses-api
     newTag: a0ebd655aa52f05c3b96b4821e63a0a9166f1749
   - name: acrplaceholder.azurecr.io/enemy-losses-frontend
-    newName: acrplaceholder.azurecr.io/enemy-losses-frontend
+    newName: acrenemylossesweatherdemodevseumu.azurecr.io/enemy-losses-frontend
     newTag: a0ebd655aa52f05c3b96b4821e63a0a9166f1749
-

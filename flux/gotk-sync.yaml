@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1m
-  url: https://github.com/example/enemy-losses-weather-demo
+  url: https://github.com/Yojimbos/WarClimate-Analytics
   ref:
     branch: main
 ---
@@ -21,4 +21,3 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-

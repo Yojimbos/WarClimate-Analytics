@@ -1,7 +1,8 @@
 locals {
   prefix            = "${var.project_name}-${var.environment}"
   normalized_prefix = replace(local.prefix, "-", "")
-  key_vault_name    = "${substr(local.normalized_prefix, 0, 16)}kv${random_string.suffix.result}"
+  region_code       = substr(replace(var.location, "-", ""), 0, 3)
+  key_vault_name    = "${substr(local.normalized_prefix, 0, 13)}kv${local.region_code}${random_string.suffix.result}"
   tags = {
     project     = var.project_name
     environment = var.environment
@@ -111,6 +112,11 @@ resource "azurerm_key_vault_access_policy" "current" {
   }
 }
 
+resource "time_sleep" "wait_for_key_vault_access_policy" {
+  depends_on      = [azurerm_key_vault_access_policy.current]
+  create_duration = "45s"
+}
+
 resource "azurerm_user_assigned_identity" "aks" {
   name                = "${local.prefix}-aks-mi"
   resource_group_name = azurerm_resource_group.this.name
@@ -123,7 +129,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   dns_prefix          = "${local.prefix}-dns"
-  kubernetes_version  = "1.30.7"
+  kubernetes_version  = var.aks_kubernetes_version
   node_resource_group = "${local.prefix}-aks-nodes"
   tags                = local.tags
 
@@ -182,7 +188,7 @@ resource "azurerm_postgresql_flexible_server" "this" {
   private_dns_zone_id           = azurerm_private_dns_zone.postgres.id
   administrator_login           = var.postgres_admin_username
   administrator_password        = var.postgres_admin_password
-  zone                          = "1"
+  zone                          = var.postgres_zone
   storage_mb                    = 32768
   sku_name                      = "B_Standard_B1ms"
   backup_retention_days         = 7
@@ -205,6 +211,8 @@ resource "azurerm_key_vault_secret" "acr_login_server" {
   value        = azurerm_container_registry.this.login_server
   key_vault_id = azurerm_key_vault.this.id
 
+  depends_on = [time_sleep.wait_for_key_vault_access_policy]
+
   lifecycle {
     ignore_changes = all
   }
@@ -215,6 +223,8 @@ resource "azurerm_key_vault_secret" "postgres_fqdn" {
   value        = azurerm_postgresql_flexible_server.this.fqdn
   key_vault_id = azurerm_key_vault.this.id
 
+  depends_on = [time_sleep.wait_for_key_vault_access_policy]
+
   lifecycle {
     ignore_changes = all
   }
@@ -224,6 +234,8 @@ resource "azurerm_key_vault_secret" "postgres_database_name" {
   name         = "postgres-database-name"
   value        = azurerm_postgresql_flexible_server_database.app.name
   key_vault_id = azurerm_key_vault.this.id
+
+  depends_on = [time_sleep.wait_for_key_vault_access_policy]
 
   lifecycle {
     ignore_changes = all
