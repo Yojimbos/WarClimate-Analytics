@@ -20,6 +20,40 @@ patches:
       - op: replace
         path: /data/CORS_ORIGINS
         value: https://war-climate-analytics.128.251.12.42.sslip.io
+  - target:
+      group: helm.toolkit.fluxcd.io
+      version: v2
+      kind: HelmRelease
+      name: ingress-nginx
+      namespace: ingress-nginx
+    patch: |-
+      - op: add
+        path: /spec/values/controller/admissionWebhooks
+        value:
+          enabled: false
+          patch:
+            enabled: false
+      - op: add
+        path: /spec/values/controller/service/loadBalancerIP
+        value: 128.251.12.42
+      - op: add
+        path: /spec/values/controller/service/annotations
+        value:
+          service.beta.kubernetes.io/azure-pip-name: war-climate-analytics-dev-ingress-pip
+  - target:
+      group: helm.toolkit.fluxcd.io
+      version: v2
+      kind: HelmRelease
+      name: kube-prometheus-stack
+      namespace: monitoring
+    patch: |-
+      - op: add
+        path: /spec/values/prometheusOperator
+        value:
+          admissionWebhooks:
+            enabled: false
+            patch:
+              enabled: false
 images:
   - name: acrplaceholder.azurecr.io/war-climate-analytics-api
     newName: acrwarclimateanalyticsdevseumu.azurecr.io/war-climate-analytics-api
