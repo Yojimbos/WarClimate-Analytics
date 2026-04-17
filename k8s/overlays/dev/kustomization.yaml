@@ -9,17 +9,17 @@ patches:
     patch: |-
       - op: replace
         path: /spec/rules/0/host
-        value: war-climate-analytics.40.127.195.251.sslip.io
+        value: war-climate-analytics.128.251.12.42.sslip.io
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: war-climate-analytics.40.127.195.251.sslip.io
+        value: war-climate-analytics.128.251.12.42.sslip.io
   - target:
       kind: ConfigMap
       name: war-climate-analytics-config
     patch: |-
       - op: replace
         path: /data/CORS_ORIGINS
-        value: https://war-climate-analytics.40.127.195.251.sslip.io
+        value: https://war-climate-analytics.128.251.12.42.sslip.io
 images:
   - name: acrplaceholder.azurecr.io/war-climate-analytics-api
     newName: acrwarclimateanalyticsdevseumu.azurecr.io/war-climate-analytics-api
