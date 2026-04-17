@@ -16,7 +16,6 @@ resources:
   - ingress/helmrepository.yaml
   - ingress/ingress-nginx.yaml
   - ingress/cert-manager.yaml
-  - ingress/clusterissuer.yaml
   - monitoring/helmrepository.yaml
   - monitoring/kube-prometheus-stack.yaml
   - monitoring/grafana-dashboards-configmap.yaml
