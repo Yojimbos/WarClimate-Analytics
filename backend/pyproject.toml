@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "war-climate-analytics"
 version = "0.1.0"
 description = "Demo analytics platform comparing official enemy losses data with historical weather."
-readme = "README.md"
+readme = {text = "WarClimate_Analytics backend package.", content-type = "text/markdown"}
 requires-python = ">=3.12"
 dependencies = [
   "alembic==1.14.1",

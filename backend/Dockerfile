@@ -12,7 +12,7 @@ COPY app /app/app
 COPY alembic /app/alembic
 COPY alembic.ini /app/alembic.ini
 COPY sample_data /app/sample_data
-COPY pyproject.toml README.md /app/
+COPY pyproject.toml /app/
 COPY entrypoint.sh /app/entrypoint.sh
 
 RUN chmod +x /app/entrypoint.sh
@@ -23,4 +23,3 @@ USER app
 EXPOSE 8000
 
 CMD ["/app/entrypoint.sh"]
-
