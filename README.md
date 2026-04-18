@@ -22,9 +22,15 @@ Portfolio-grade demo that visualizes official daily enemy personnel loss data ag
 - Weather source: Open-Meteo archive API for historical daily reference weather.
 - Backend computes rolling averages, Pearson and Spearman correlations, summary cards, and chart-ready series.
 - Frontend queries the REST API and renders charts, tables, source cards, and limitations.
-- Azure target footprint: AKS, ACR, Azure Database for PostgreSQL Flexible Server, Azure Key Vault, public ingress only.
+- Azure target footprint: AKS, ACR, Azure Database for PostgreSQL Flexible Server, Azure Key Vault, and public ingress only.
 
-More detail is available in [ARCHITECTURE.md](ARCHITECTURE.md).
+Project documentation lives under [`docs/`](docs):
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Security](docs/SECURITY.md)
+- [Operations](docs/OPERATIONS.md)
+- [GitHub setup](docs/GITHUB_SETUP.md)
+- [Terraform bootstrap](docs/TERRAFORM_BOOTSTRAP.md)
 
 ## Quick Start: Local
 
@@ -62,7 +68,7 @@ make test
 4. Update image tags through Flux-managed manifests.
 5. Apply secrets through the documented secret management pattern.
 
-See [OPERATIONS.md](OPERATIONS.md) for deployment and day-2 steps.
+See [docs/OPERATIONS.md](docs/OPERATIONS.md) for deployment and day-2 steps.
 
 ## Data Sources
 
@@ -78,14 +84,14 @@ See [OPERATIONS.md](OPERATIONS.md) for deployment and day-2 steps.
 
 ## Location Strategy
 
-This demo uses a documented weather proxy strategy instead of claiming battlefield-specific weather accuracy. Users can choose from predefined Ukrainian reference locations, with `Kyiv` as the default baseline. This improves transparency while keeping the demo easy to understand and inexpensive to operate.
+This demo uses a documented weather proxy strategy instead of claiming battlefield-specific weather accuracy. Users can choose from three reference locations near the active combat zone context for the demo: `Kharkiv`, `Dnipro`, and `Zaporizhzhia`. This keeps the UI simple while being more honest about the intended analytical framing.
 
 ## Limitations
 
 - Correlation does not imply causation. The application does not infer operational conclusions.
 - Official losses publications can occasionally change wording or publish timing, so ingestion uses defensive parsing and run tracking.
 - Weather is a reference proxy for a chosen location, not a geospatial reconstruction of combat conditions.
-- For local development, sample providers are enabled by default to avoid external dependency requirements.
+- Local development uses the official losses adapter and Open-Meteo by default, while sample seed data remains available for offline smoke testing.
 
 ## Security Notes
 
@@ -105,6 +111,6 @@ This demo uses a documented weather proxy strategy instead of claiming battlefie
 
 ## TODO
 
-- Add richer article discovery for official losses pages beyond deterministic slug generation.
+- Add browser-based smoke tests for the dashboard filter flow.
 - Add screenshot assets and optional E2E browser smoke tests.
 - Add SOPS or External Secrets Operator if the demo needs stronger GitOps secret automation.
