@@ -18,7 +18,6 @@ frontend/dist/
 coverage.xml
 backend/.pytest_cache/
 backend/.coverage
-backend/alembic.ini
 terraform.tfstate
 terraform.tfstate.*
 .terraform/
