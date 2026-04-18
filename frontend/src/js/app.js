@@ -3,7 +3,9 @@ const API_BASE = window.location.origin.includes("8080")
   : window.location.origin;
 
 const state = {
-  charts: {}
+  charts: {},
+  loading: false,
+  requestToken: 0
 };
 
 function defaultDateRange() {
@@ -20,6 +22,7 @@ function setDefaultControls() {
   const range = defaultDateRange();
   document.querySelector("#fromDate").value = range.from;
   document.querySelector("#toDate").value = range.to;
+  document.querySelector("#location").value = "kharkiv";
 }
 
 async function fetchJson(path, params) {
@@ -27,7 +30,16 @@ async function fetchJson(path, params) {
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
+    let detail = `Request failed with status ${response.status}`;
+    try {
+      const payload = await response.json();
+      if (payload?.detail) {
+        detail = payload.detail;
+      }
+    } catch (error) {
+      console.debug("Could not parse error response", error);
+    }
+    throw new Error(detail);
   }
   return response.json();
 }
@@ -45,6 +57,26 @@ function renderSummary(cards) {
     `;
     root.appendChild(article);
   });
+}
+
+function setRequestStatus(message, tone = "muted") {
+  const element = document.querySelector("#requestStatus");
+  element.textContent = message;
+  element.dataset.tone = tone;
+}
+
+function setControlsDisabled(disabled) {
+  document.querySelector("#fromDate").disabled = disabled;
+  document.querySelector("#toDate").disabled = disabled;
+  document.querySelector("#location").disabled = disabled;
+  document.querySelector("#applyFilters").disabled = disabled;
+}
+
+function setButtonLoading(loading) {
+  const button = document.querySelector("#applyFilters");
+  button.dataset.loading = loading ? "true" : "false";
+  const label = button.querySelector(".button-label");
+  label.textContent = loading ? "Processing..." : "Apply filters";
 }
 
 function renderList(elementId, items, render) {
@@ -74,6 +106,11 @@ function renderTable(records) {
   });
 }
 
+function resetCharts() {
+  Object.values(state.charts).forEach((chart) => chart.destroy());
+  state.charts = {};
+}
+
 function upsertChart(key, canvasId, config) {
   if (state.charts[key]) {
     state.charts[key].destroy();
@@ -83,6 +120,11 @@ function upsertChart(key, canvasId, config) {
 }
 
 function renderCharts(records) {
+  if (!records.length) {
+    resetCharts();
+    return;
+  }
+
   const labels = records.map((item) => item.date);
   upsertChart("timeseries", "timeseriesChart", {
     type: "line",
@@ -150,28 +192,63 @@ function renderCharts(records) {
 }
 
 async function loadDashboard() {
+  if (state.loading) {
+    return;
+  }
+
+  state.loading = true;
+  state.requestToken += 1;
+  const requestToken = state.requestToken;
   const from = document.querySelector("#fromDate").value;
   const to = document.querySelector("#toDate").value;
   const location = document.querySelector("#location").value;
-  const [summary, correlation] = await Promise.all([
-    fetchJson("/api/v1/summary", { from, to, location }),
-    fetchJson("/api/v1/correlation", { from, to, location })
-  ]);
-  renderSummary(summary.cards);
-  renderTable(correlation.records);
-  renderCharts(correlation.records);
-  renderList("#insightsList", correlation.insights, (item) => item);
-  renderList("#sourcesList", summary.sources, (item) => `<a href="${item.url}" target="_blank" rel="noreferrer">${item.name}</a>`);
-  renderList("#limitationsList", summary.limitations, (item) => item);
+  setControlsDisabled(true);
+  setButtonLoading(true);
+  setRequestStatus("Refreshing analytics for the selected range...", "muted");
+
+  try {
+    const [summary, correlation] = await Promise.all([
+      fetchJson("/api/v1/summary", { from, to, location }),
+      fetchJson("/api/v1/correlation", { from, to, location })
+    ]);
+
+    if (requestToken !== state.requestToken) {
+      return;
+    }
+
+    renderSummary(summary.cards);
+    renderTable(correlation.records);
+    renderCharts(correlation.records);
+    renderList("#insightsList", correlation.insights, (item) => item);
+    renderList("#sourcesList", summary.sources, (item) => `<a href="${item.url}" target="_blank" rel="noreferrer">${item.name}</a>`);
+    renderList("#limitationsList", summary.limitations, (item) => item);
+
+    if (!correlation.records.length) {
+      setRequestStatus("No overlapping records were found for this filter combination.", "warning");
+    } else {
+      setRequestStatus(`Loaded ${correlation.records.length} daily records for ${location}.`, "success");
+    }
+  } catch (error) {
+    if (requestToken !== state.requestToken) {
+      return;
+    }
+    console.error(error);
+    setRequestStatus(error.message || "Could not refresh analytics. Please try again.", "error");
+  } finally {
+    if (requestToken === state.requestToken) {
+      state.loading = false;
+      setControlsDisabled(false);
+      setButtonLoading(false);
+    }
+  }
 }
 
 function bindEvents() {
   document.querySelector("#applyFilters").addEventListener("click", () => {
-    loadDashboard().catch(console.error);
+    loadDashboard();
   });
 }
 
 setDefaultControls();
 bindEvents();
-loadDashboard().catch(console.error);
-
+loadDashboard();

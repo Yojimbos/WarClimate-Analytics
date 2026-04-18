@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 LOCATIONS = {
-    "kyiv": {"name": "Kyiv", "latitude": 50.4501, "longitude": 30.5234},
-    "lviv": {"name": "Lviv", "latitude": 49.8397, "longitude": 24.0297},
-    "odesa": {"name": "Odesa", "latitude": 46.4825, "longitude": 30.7233},
     "kharkiv": {"name": "Kharkiv", "latitude": 49.9935, "longitude": 36.2304},
+    "dnipro": {"name": "Dnipro", "latitude": 48.4647, "longitude": 35.0462},
+    "zaporizhzhia": {"name": "Zaporizhzhia", "latitude": 47.8388, "longitude": 35.1396},
 }
 
 LOSSES_SOURCE_NAME = "Ministry of Defence of Ukraine"

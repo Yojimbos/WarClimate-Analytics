@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     )
     admin_api_key: str = Field(default="dev-admin-key", alias="ADMIN_API_KEY")
     cors_origins: str = Field(default="http://localhost:8080", alias="CORS_ORIGINS")
-    losses_provider: str = Field(default="sample", alias="LOSSES_PROVIDER")
-    weather_provider: str = Field(default="sample", alias="WEATHER_PROVIDER")
+    losses_provider: str = Field(default="official", alias="LOSSES_PROVIDER")
+    weather_provider: str = Field(default="open-meteo", alias="WEATHER_PROVIDER")
     request_timeout_seconds: float = 15.0
     data_dir: Path = Path("sample_data")
 

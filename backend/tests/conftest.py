@@ -40,7 +40,7 @@ def db_session() -> Generator[Session, None, None]:
     db.add(
         WeatherDaily(
             date=date(2026, 4, 10),
-            location_name="Kyiv",
+            location_name="Kharkiv",
             avg_temperature_c=12.3,
             min_temperature_c=8.0,
             max_temperature_c=15.5,

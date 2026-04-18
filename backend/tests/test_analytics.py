@@ -20,7 +20,7 @@ def test_correlation_payload_has_records(db_session) -> None:
     db_session.add(
         WeatherDaily(
             date=date(2026, 4, 11),
-            location_name="Kyiv",
+            location_name="Kharkiv",
             avg_temperature_c=14.0,
             min_temperature_c=9.0,
             max_temperature_c=17.5,
@@ -37,7 +37,7 @@ def test_correlation_payload_has_records(db_session) -> None:
     )
     db_session.commit()
     payload = AnalyticsService(db_session).get_correlation_payload(
-        date(2026, 4, 4), date(2026, 4, 11), "kyiv"
+        date(2026, 4, 4), date(2026, 4, 11), "kharkiv"
     )
     assert len(payload["records"]) == 2
     assert payload["pearson_temperature_vs_losses"] is not None

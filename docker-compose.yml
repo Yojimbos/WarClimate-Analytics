@@ -21,8 +21,8 @@ services:
     environment:
       APP_ENV: local
       DATABASE_URL: postgresql+psycopg://demo:demo@postgres:5432/war_climate_analytics
-      WEATHER_PROVIDER: sample
-      LOSSES_PROVIDER: sample
+      WEATHER_PROVIDER: open-meteo
+      LOSSES_PROVIDER: official
       ADMIN_API_KEY: dev-admin-key
       CORS_ORIGINS: http://localhost:8080
     depends_on:

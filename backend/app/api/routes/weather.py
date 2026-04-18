@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.api.data_refresh import ensure_data_available
 from app.api.deps import parse_date_range
 from app.db.session import get_db
 from app.models.weather_daily import WeatherDaily
@@ -13,12 +14,20 @@ router = APIRouter(prefix="/weather", tags=["weather"])
 
 
 @router.get("")
-def get_weather(
+async def get_weather(
     date_range: tuple = Depends(parse_date_range),
-    location: str = Query(default="kyiv"),
+    location: str = Query(default="kharkiv"),
     db: Session = Depends(get_db),
 ) -> dict:
     from_date, to_date = date_range
+    await ensure_data_available(
+        db,
+        from_date,
+        to_date,
+        location,
+        include_losses=False,
+        include_weather=True,
+    )
     location_name = get_location(location)["name"]
     rows = db.execute(
         select(WeatherDaily)

@@ -42,13 +42,16 @@
           <div class="field">
             <label for="location">Reference location</label>
             <select id="location">
-              <option value="kyiv">Kyiv</option>
-              <option value="lviv">Lviv</option>
-              <option value="odesa">Odesa</option>
               <option value="kharkiv">Kharkiv</option>
+              <option value="dnipro">Dnipro</option>
+              <option value="zaporizhzhia">Zaporizhzhia</option>
             </select>
           </div>
-          <button id="applyFilters" class="primary-button" type="button">Apply filters</button>
+          <button id="applyFilters" class="primary-button" type="button">
+            <span class="button-label">Apply filters</span>
+            <span class="button-spinner" aria-hidden="true"></span>
+          </button>
+          <p id="requestStatus" class="request-status" aria-live="polite"></p>
         </section>
 
         <section class="summary-grid" id="summaryCards"></section>
@@ -123,4 +126,3 @@
     </div>
   </body>
 </html>
-
