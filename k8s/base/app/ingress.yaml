@@ -16,6 +16,13 @@ spec:
     - host: demo.example.com
       http:
         paths:
+          - path: /health
+            pathType: Exact
+            backend:
+              service:
+                name: war-climate-analytics-api
+                port:
+                  number: 80
           - path: /api
             pathType: Prefix
             backend:
