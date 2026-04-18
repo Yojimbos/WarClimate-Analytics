@@ -13,8 +13,7 @@ Portfolio-grade demo that visualizes official daily enemy personnel loss data ag
 
 ## Demo Screenshots
 
-- `docs/screenshots/dashboard-overview.png` - placeholder
-- `docs/screenshots/mobile-view.png` - placeholder
+- `docs/screenshots/` 
 
 ## Architecture Overview
 
