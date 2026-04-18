@@ -16,6 +16,7 @@ spec:
       containers:
         - name: frontend
           image: acrplaceholder.azurecr.io/war-climate-analytics-frontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           resources:

@@ -19,7 +19,7 @@ spec:
       containers:
         - name: api
           image: acrplaceholder.azurecr.io/war-climate-analytics-api:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           envFrom:
@@ -53,4 +53,3 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
-

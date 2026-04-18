@@ -6,32 +6,46 @@ on:
     types: [completed]
 
 permissions:
-  contents: write
+  id-token: write
+  contents: read
+
+env:
+  PROJECT_NAME: war-climate-analytics
+  ENVIRONMENT: dev
 
 jobs:
-  update-flux-images:
+  rollout-latest:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: azure/login@v2
         with:
-          ref: main
-      - name: Update image tags
-        env:
-          IMAGE_SHA: ${{ github.event.workflow_run.head_sha }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Discover AKS from Azure
+        id: aks
+        shell: bash
         run: |
-          python - <<'PY'
-          import re
-          from pathlib import Path
-          path = Path("k8s/overlays/dev/kustomization.yaml")
-          text = path.read_text(encoding="utf-8")
-          image_sha = __import__("os").environ["IMAGE_SHA"]
-          text = re.sub(r"newTag:\s+\S+", f"newTag: {image_sha}", text)
-          path.write_text(text, encoding="utf-8")
-          PY
-      - name: Commit image tag update
+          RG_NAME="${PROJECT_NAME}-${ENVIRONMENT}-rg"
+          AKS_NAME=$(az aks list --resource-group "$RG_NAME" --query "[0].name" -o tsv)
+          if [ -z "$AKS_NAME" ]; then
+            echo "AKS not found in resource group $RG_NAME"
+            exit 1
+          fi
+          echo "resource_group=$RG_NAME" >> "$GITHUB_OUTPUT"
+          echo "name=$AKS_NAME" >> "$GITHUB_OUTPUT"
+      - name: Get AKS credentials
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "chore: update flux image tag ${IMAGE_SHA}" || exit 0
-          git push
+          az aks get-credentials \
+            --resource-group "${{ steps.aks.outputs.resource_group }}" \
+            --name "${{ steps.aks.outputs.name }}" \
+            --overwrite-existing
+      - name: Restart workloads to pull latest images
+        run: |
+          kubectl rollout restart deployment/war-climate-analytics-api -n app
+          kubectl rollout restart deployment/war-climate-analytics-frontend -n app
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/war-climate-analytics-api -n app --timeout=10m
+          kubectl rollout status deployment/war-climate-analytics-frontend -n app --timeout=10m

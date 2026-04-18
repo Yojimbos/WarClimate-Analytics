@@ -17,7 +17,8 @@ spec:
           containers:
             - name: ingest
               image: acrplaceholder.azurecr.io/war-climate-analytics-api:latest
-              command: ["python", "-m", "app.cli", "ingest", "--days", "30", "--location", "kyiv"]
+              imagePullPolicy: Always
+              command: ["python", "-m", "app.cli", "ingest", "--days", "30", "--location", "kharkiv"]
               envFrom:
                 - configMapRef:
                     name: war-climate-analytics-config
@@ -37,4 +38,3 @@ spec:
                 readOnlyRootFilesystem: true
                 capabilities:
                   drop: ["ALL"]
-

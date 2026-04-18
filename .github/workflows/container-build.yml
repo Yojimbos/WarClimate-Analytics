@@ -59,4 +59,6 @@ jobs:
           context: ${{ matrix.context }}
           file: ${{ matrix.dockerfile }}
           push: true
-          tags: ${{ steps.acr.outputs.login_server }}/${{ matrix.image }}:${{ github.sha }}
+          tags: |
+            ${{ steps.acr.outputs.login_server }}/${{ matrix.image }}:${{ github.sha }}
+            ${{ steps.acr.outputs.login_server }}/${{ matrix.image }}:latest

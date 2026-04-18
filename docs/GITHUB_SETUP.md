@@ -47,8 +47,12 @@ Recommended Azure roles for the GitHub OIDC principal:
 
 ## Flux Image Update Flow
 
-The current workflow updates `k8s/overlays/dev/kustomization.yaml` with the current `GITHUB_SHA`.
-For a more scalable setup, replace this with Flux image automation controllers in a future iteration.
+- The container workflow publishes two tags for each image:
+  - a commit-specific SHA tag
+  - `latest`
+- The Kubernetes manifests in this demo track `latest`.
+- The deploy workflow runs only after a successful `container-build` workflow and restarts the workloads in AKS so the cluster pulls the newest `latest` image.
+- This keeps docs-only or Terraform-only commits from advancing runtime image references to tags that were never built.
 
 ## Code Scanning
 
