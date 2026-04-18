@@ -25,6 +25,30 @@ function setDefaultControls() {
   document.querySelector("#location").value = "kharkiv";
 }
 
+function diffDaysInclusive(from, to) {
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const fromDate = new Date(`${from}T00:00:00`);
+  const toDate = new Date(`${to}T00:00:00`);
+  return Math.floor((toDate - fromDate) / millisecondsPerDay) + 1;
+}
+
+function validateFilters(from, to) {
+  if (!from || !to) {
+    return "Choose both From and To dates.";
+  }
+
+  if (from > to) {
+    return "From date must be earlier than or equal to To date.";
+  }
+
+  const rangeDays = diffDaysInclusive(from, to);
+  if (rangeDays < 7 || rangeDays > 365) {
+    return "Date range must be between 7 and 365 days.";
+  }
+
+  return null;
+}
+
 async function fetchJson(path, params) {
   const url = new URL(`${API_BASE}${path}`);
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
@@ -196,12 +220,19 @@ async function loadDashboard() {
     return;
   }
 
-  state.loading = true;
-  state.requestToken += 1;
-  const requestToken = state.requestToken;
   const from = document.querySelector("#fromDate").value;
   const to = document.querySelector("#toDate").value;
   const location = document.querySelector("#location").value;
+  const validationError = validateFilters(from, to);
+
+  if (validationError) {
+    setRequestStatus(validationError, "error");
+    return;
+  }
+
+  state.loading = true;
+  state.requestToken += 1;
+  const requestToken = state.requestToken;
   setControlsDisabled(true);
   setButtonLoading(true);
   setRequestStatus("Refreshing analytics for the selected range...", "muted");
